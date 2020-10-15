@@ -189,7 +189,12 @@ Function log {
     $before = $before1.Text
     $after = $after1.Text
     $date = $date1.Text
-
+    
+    if ($computername1.Text -and $computername1.Text -ne "localhost") {
+          $uname=("$env:USERDOMAIN\$env:USERNAME")
+          $cred = Get-Credential $uname
+          }
+          
     if (!$newest) {$newest = "200"}
  
  function parser1() {
@@ -241,7 +246,6 @@ Function log {
                 }
      }
  }
- 
  
     if ($logname) {
 
