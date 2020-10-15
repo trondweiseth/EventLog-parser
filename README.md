@@ -4,14 +4,18 @@ Eventlog-Gui is a tool for parsing logs from EventViewer and assign filter scope
 Eventlog cli has the same functions, just runs in powershell cli instead
 
 
-To fetch and parse Event logs from remote system, only requirement is Computername.
-If no other value is provided, it will fetch 200 logs of each log type.
-To copy logs from Out-Gridview, select log output and hit ok or enter. It will copy the text to clipboard.
+To fetch and parse windows event logs from local or remote Computer.
+If the "all" radio button is selected, it will fetch 200 logs of each log type.
+To copy logs from Out-Gridview, select log lines and hit ok or enter. It will copy the text to clipboard.
 
 <img src="eventlogcli2.png">
 
 
 # Event Log CLI Parser
+
+Same as the gui version, but can print out a more detailed message on the cli with option -o.
+If no logname is provided, it will fetch all 3 log types. Default is set to the 200 latest logs.
+To copy logs from Out-Gridview, select log lines and hit ok or enter. It will copy the text to clipboard.
 
 SYNTAX
 
