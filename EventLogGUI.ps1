@@ -71,7 +71,7 @@ $application.Font                = New-Object System.Drawing.Font('Microsoft San
 
 $newest1                         = New-Object system.Windows.Forms.TextBox
 $newest1.multiline               = $false
-$newest1.width                   = 144
+$newest1.width                   = 145
 $newest1.height                  = 20
 $newest1.Text                    = "200"
 $newest1.location                = New-Object System.Drawing.Point(122,65)
@@ -88,37 +88,37 @@ $Groupbox2.BackColor             = [System.Drawing.ColorTranslator]::FromHtml("#
 
 $date1                           = New-Object system.Windows.Forms.TextBox
 $date1.multiline                 = $false
-$date1.width                     = 143
+$date1.width                     = 145
 $date1.height                    = 20
 $date1.Text                      = $(get-date -Format MM/dd)
-$date1.location                  = New-Object System.Drawing.Point(123,92)
+$date1.location                  = New-Object System.Drawing.Point(122,92)
 $date1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 $date1.Add_Click( { $this.SelectAll(); $this.Focus() })
 $date1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $before1                         = New-Object system.Windows.Forms.TextBox
 $before1.multiline               = $false
-$before1.width                   = 143
+$before1.width                   = 145
 $before1.height                  = 20
-$before1.location                = New-Object System.Drawing.Point(123,119)
+$before1.location                = New-Object System.Drawing.Point(122,119)
 $before1.Font                    = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 $before1.Add_Click( { $this.SelectAll(); $this.Focus() })
 $before1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $after1                          = New-Object system.Windows.Forms.TextBox
 $after1.multiline                = $false
-$after1.width                    = 143
+$after1.width                    = 145
 $after1.height                   = 20
-$after1.location                 = New-Object System.Drawing.Point(123,146)
+$after1.location                 = New-Object System.Drawing.Point(122,146)
 $after1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 $after1.Add_Click( { $this.SelectAll(); $this.Focus() })
 $after1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $time1                           = New-Object system.Windows.Forms.TextBox
 $time1.multiline                 = $false
-$time1.width                     = 144
+$time1.width                     = 145
 $time1.height                    = 20
-$time1.location                  = New-Object System.Drawing.Point(121,173)
+$time1.location                  = New-Object System.Drawing.Point(122,173)
 $time1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 $time1.Add_Click( { $this.SelectAll(); $this.Focus() })
 $time1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
