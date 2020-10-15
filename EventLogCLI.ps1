@@ -1,19 +1,11 @@
 <# .SYNOPSIS
-
      EventLog parser 
-
 .DESCRIPTION
-
      Gettng event logs on local or remote PC
      Example : log hostname.osl.basefarm.net -logname system -before 11:00 -after 10:00 -date 10/14
-
 .NOTES
-
      Author     : Trond Weiseth
 #>
-
-$uname=("$env:USERDOMAIN\$env:USERNAME")
-$cred = Get-Credential $uname
 
     param(
     [CmdletBinding()]
@@ -30,6 +22,11 @@ $cred = Get-Credential $uname
     [string]$logname
     )
 
+    if ($computername1.Text -and $computername1.Text -ne "localhost") {
+          $uname=("$env:USERDOMAIN\$env:USERNAME")
+          $cred = Get-Credential $uname
+          }
+          
     if ($help) {
         Write-Host -ForegroundColor Green "###################################################################################################################################"
         Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/YYYY>] [-before <time>] [-after <time>]"
