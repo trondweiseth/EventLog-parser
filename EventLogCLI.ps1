@@ -1,5 +1,3 @@
-
-
 <# .SYNOPSIS
 
      EventLog parser 
@@ -13,6 +11,9 @@
 
      Author     : Trond Weiseth
 #>
+
+$uname=("$env:USERDOMAIN\$env:USERNAME")
+$cred = Get-Credential $uname
 
     param(
     [CmdletBinding()]
