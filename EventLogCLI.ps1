@@ -26,7 +26,12 @@
     [ValidateSet("system","application","security")]
     [string]$logname
     )
-
+     
+    if ($computername1.Text -and $computername1.Text -ne "localhost") {
+          $uname=("$env:USERDOMAIN\$env:USERNAME")
+          $cred = Get-Credential $uname
+    }
+    
     if ($help) {
         Write-Host -ForegroundColor Green "###################################################################################################################################"
         Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/YYYY>] [-before <time>] [-after <time>]"
