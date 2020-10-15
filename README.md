@@ -8,7 +8,7 @@ To fetch and parse Event logs from remote system, only requirement is Computerna
 If no other value is provided, it will fetch 200 logs of each log type.
 To copy logs from Out-Gridview, select log output and hit ok or enter. It will copy the text to clipboard.
 
-<img src="eventlogcli.png">
+<img src="">
 
 
 # Event Log CLI Parser
