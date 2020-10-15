@@ -16,7 +16,7 @@ $Form.TopMost                    = $false
 
 $Groupbox1                       = New-Object system.Windows.Forms.Groupbox
 $Groupbox1.height                = 37
-$Groupbox1.width                 = 459
+$Groupbox1.width                 = 409
 $Groupbox1.location              = New-Object System.Drawing.Point(-3,-2)
 $Groupbox1.BackColor             = [System.Drawing.ColorTranslator]::FromHtml("#b8e986")
 
