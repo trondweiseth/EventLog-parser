@@ -1,9 +1,8 @@
 <# .SYNOPSIS
-     EventLog Script 
+     EventLog parser
 .DESCRIPTION
      Gettng event logs on local or remote PC
 .NOTES
-
      Author     : Trond Weiseth
 #>
 
@@ -28,12 +27,12 @@ $Label1.height                   = 10
 $Label1.location                 = New-Object System.Drawing.Point(11,12)
 $Label1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold))
 
-$computername1                    = New-Object system.Windows.Forms.TextBox
-$copmutername1.multiline          = $false
-$copmutername1.width              = 145
-$copmutername1.height             = 20
-$copmutername1.location           = New-Object System.Drawing.Point(122,38)
-$copmutername1.Font               = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$copmutername1                   = New-Object system.Windows.Forms.TextBox
+$copmutername1.multiline         = $false
+$copmutername1.width             = 145
+$copmutername1.height            = 20
+$copmutername1.location          = New-Object System.Drawing.Point(122,38)
+$copmutername1.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $all                             = New-Object system.Windows.Forms.RadioButton
 $all.text                        = "All"
@@ -67,47 +66,48 @@ $application.height              = 26
 $application.location            = New-Object System.Drawing.Point(10,17)
 $application.Font                = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$newest1                          = New-Object system.Windows.Forms.TextBox
-$newest1.multiline                = $false
-$newest1.width                    = 144
-$newest1.height                   = 20
-$newest1.location                 = New-Object System.Drawing.Point(122,65)
-$newest1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$newest1                         = New-Object system.Windows.Forms.TextBox
+$newest1.multiline               = $false
+$newest1.width                   = 144
+$newest1.height                  = 20
+$newest1.location                = New-Object System.Drawing.Point(122,65)
+$newest1.Font                    = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $Groupbox2                       = New-Object system.Windows.Forms.Groupbox
 $Groupbox2.height                = 121
 $Groupbox2.width                 = 112
-$Groupbox2.text                  = "EventLogs"
+$Groupbox2.text                  = "Group Box"
 $Groupbox2.location              = New-Object System.Drawing.Point(1,36)
 $Groupbox2.BackColor             = [System.Drawing.ColorTranslator]::FromHtml("#9b9b9b")
 
-$date1                            = New-Object system.Windows.Forms.TextBox
-$date1.multiline                  = $false
-$date1.width                      = 143
-$date1.height                     = 20
-$date1.location                   = New-Object System.Drawing.Point(123,92)
-$date1.Font                       = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$date1                           = New-Object system.Windows.Forms.TextBox
+$date1.multiline                 = $false
+$date1.width                     = 143
+$date1.height                    = 20
+$date1.Text                      = $(get-date -Format MM/dd)
+$date1.location                  = New-Object System.Drawing.Point(123,92)
+$date1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$before1                          = New-Object system.Windows.Forms.TextBox
-$before1.multiline                = $false
-$before1.width                    = 143
-$before1.height                   = 20
-$before1.location                 = New-Object System.Drawing.Point(123,119)
-$before1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$before1                         = New-Object system.Windows.Forms.TextBox
+$before1.multiline               = $false
+$before1.width                   = 143
+$before1.height                  = 20
+$before1.location                = New-Object System.Drawing.Point(123,119)
+$before1.Font                    = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$after1                           = New-Object system.Windows.Forms.TextBox
-$after1.multiline                 = $false
-$after1.width                     = 143
-$after1.height                    = 20
-$after1.location                  = New-Object System.Drawing.Point(123,146)
-$after1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$after1                          = New-Object system.Windows.Forms.TextBox
+$after1.multiline                = $false
+$after1.width                    = 143
+$after1.height                   = 20
+$after1.location                 = New-Object System.Drawing.Point(123,146)
+$after1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$time1                            = New-Object system.Windows.Forms.TextBox
-$time1.multiline                  = $false
-$time1.width                      = 144
-$time1.height                     = 20
-$time1.location                   = New-Object System.Drawing.Point(121,173)
-$time1.Font                       = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$time1                           = New-Object system.Windows.Forms.TextBox
+$time1.multiline                 = $false
+$time1.width                     = 144
+$time1.height                    = 20
+$time1.location                  = New-Object System.Drawing.Point(121,173)
+$time1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $Button1                         = New-Object system.Windows.Forms.Button
 $Button1.text                    = "Run"
@@ -158,25 +158,20 @@ $Label6.location                 = New-Object System.Drawing.Point(277,70)
 $Label6.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $Label7                          = New-Object system.Windows.Forms.Label
-$Label7.text                     = "Date dd/MM/yyyy"
+$Label7.text                     = "Date (dd/MM/yyyy)"
 $Label7.AutoSize                 = $true
 $Label7.width                    = 25
 $Label7.height                   = 10
 $Label7.location                 = New-Object System.Drawing.Point(277,97)
 $Label7.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$Form.controls.AddRange(@($Groupbox1,$copmutername,$newest1,$Groupbox2,$date,$before,$after,$time,$Button1,$Label2,$Label3,$Label4,$Label5,$Label6,$Label7))
+$Form.controls.AddRange(@($Groupbox1,$copmutername1,$newest1,$Groupbox2,$date1,$before1,$after1,$time1,$Button1,$Label2,$Label3,$Label4,$Label5,$Label6,$Label7))
 $Groupbox1.controls.AddRange(@($Label1))
 $Groupbox2.controls.AddRange(@($all,$system,$security,$application))
 
 
 $Button1.Add_Click({ log })
 
-#Write your logic code here
-
-
-#$uname=("$env:USERDOMAIN\$env:USERNAME")
-#$cred = Get-Credential $uname
 
 Function log {
     if ($system.Checked -eq $true) {
@@ -262,7 +257,22 @@ Function log {
                     $date = $args[3]
                     $before = $args[4]
                     $after = $args[5]
-                    parser1
+                    if ($after -and $before) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
+                    } elseif ($after) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after}
+                    } elseif ($before) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $before}
+                    } elseif ($date) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date}
+                    } elseif ($date -and $before) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
+                    } elseif ($date -and $before -and $after) {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
+                    } else {
+                        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch "$time"}
+                    }
+
                     }
         }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
@@ -284,12 +294,40 @@ Function log {
                 $before = $args[4]
                 $after = $args[5]
                 $lognames="Application","Security","System"
-                logparser2
+
+                if ($after -and $before) {
+                   $lognames | ForEach-Object {
+                       Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
+                       }
+                } elseif ($after) {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after}
+                           }
+                } elseif ($before) {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
+                           }
+                } elseif ($date) {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
+                           }
+                } elseif ($date -and $before) {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
+                           }
+                } elseif ($date -and $before -and $after) {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
+                           }
+                } else {
+                       $lognames | ForEach-Object {
+                           Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
+                           }
+                }
+
                 }
             }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
         }
     }
-
-
 [void]$Form.ShowDialog()
