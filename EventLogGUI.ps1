@@ -172,7 +172,7 @@ $Label6.location                 = New-Object System.Drawing.Point(277,70)
 $Label6.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $Label7                          = New-Object system.Windows.Forms.Label
-$Label7.text                     = "Date (dd/MM/yyyy)"
+$Label7.text                     = "Date"
 $Label7.AutoSize                 = $true
 $Label7.width                    = 25
 $Label7.height                   = 10
