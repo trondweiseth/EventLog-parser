@@ -332,7 +332,8 @@ function parser2() {
                         $lognames | ForEach-Object {
                             Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
                             }
-                    } else {                       $lognames | ForEach-Object {
+                    } else {
+                         $lognames | ForEach-Object {
                             Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
                             }
                     }
