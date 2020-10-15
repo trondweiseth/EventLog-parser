@@ -1,6 +1,6 @@
 # Powershell-GUI for Event Logs
 
-Eventlog-Gui is a tool for parsing logs from EventViewer and assign filter scopes.
+Eventlog-GUI is a tool for parsing logs from EventViewer and assign filter scopes.
 Eventlog cli has the same functions, just runs in powershell cli instead
 
 To fetch and parse windows event logs from local or remote Computer.
