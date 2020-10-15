@@ -1,7 +1,7 @@
 # Powershell-GUI for Event Logs
 
 ![Screenshot]()
-
+<img src="eventlogcli.png">
 Eventlog-Gui is a tool for parsing logs from EventViewer and assign filter scopes.
 Eventlog cli has the same functions, just runs in powershell cli instead
 
