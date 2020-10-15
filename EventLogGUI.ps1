@@ -184,6 +184,7 @@ $Groupbox1.controls.AddRange(@($Label1))
 $Groupbox2.controls.AddRange(@($all,$system,$security,$application))
 
 $Button1.Add_Click({ log })
+
 Function log {
     if ($system.Checked -eq $true) {
         $logname = "system"
@@ -203,10 +204,11 @@ Function log {
     if ($computername1.Text -and $computername1.Text -ne "localhost") {
         $uname=("$env:USERDOMAIN\$env:USERNAME")
         $cred = Get-Credential $uname
-        }
+    }
 
     if (!$newest) {$newest = "200"}
- function parser1() {
+    
+function parser1() {
     if ($after -and $before) {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
     } elseif ($after) {
@@ -222,9 +224,9 @@ Function log {
     } else {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch "$time"}
     }
- }
- 
- function parser2() {
+}
+
+function parser2() {
     if ($after -and $before) {
         $lognames | ForEach-Object {
             Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
@@ -253,15 +255,15 @@ Function log {
                 Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
                 }
      }
- }
+}
  
     if ($logname) {
 
-         if (!$ComputerName -or $ComputerName -imatch "localhost") {
-            $res = Invoke-Command -ScriptBlock {
-            parser1
-            }
-         } else {
+            if (!$ComputerName -or $ComputerName -imatch "localhost") {
+                $res = Invoke-Command -ScriptBlock {
+                    parser1
+                    }
+            } else {
                 $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock {
                     $newest = $args[0]
                     $time = $args[1]
@@ -269,6 +271,7 @@ Function log {
                     $date = $args[3]
                     $before = $args[4]
                     $after = $args[5]
+
                     if ($after -and $before) {
                         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
                     } elseif ($after) {
@@ -287,50 +290,51 @@ Function log {
         }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
         }
+
     elseif ($all.Checked) {
             if (!$ComputerName -or $ComputerName -imatch "localhost") {
                 $res = Invoke-Command -ScriptBlock {
                     $lognames="Application","Security","System"
                     parser2
                     }
-
             } else {
                 $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock {
-                $newest = $args[0]
-                $time = $args[1]
-                $logname = $args[2]
-                $date = $args[3]
-                $before = $args[4]
-                $after = $args[5]
-                $lognames="Application","Security","System"
-                if ($after -and $before) {
-                   $lognames | ForEach-Object {
-                       Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
-                       }
-                } elseif ($after) {
-                       $lognames | ForEach-Object {
-                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after}
-                           }
-                } elseif ($before) {
-                       $lognames | ForEach-Object {
-                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
-                           }
-                } elseif ($date) {
-                       $lognames | ForEach-Object {
-                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
-                           }
-                } elseif ($date -and $before) {
-                       $lognames | ForEach-Object {
-                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
-                           }
-                } elseif ($date -and $before -and $after) {
-                       $lognames | ForEach-Object {
-                           Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
-                           }
-                } else {                       $lognames | ForEach-Object {
-                           Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
-                           }
-                }
+                    $newest = $args[0]
+                    $time = $args[1]
+                    $logname = $args[2]
+                    $date = $args[3]
+                    $before = $args[4]
+                    $after = $args[5]
+                    $lognames="Application","Security","System"
+
+                    if ($after -and $before) {
+                    $lognames | ForEach-Object {
+                        Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
+                        }
+                    } elseif ($after) {
+                        $lognames | ForEach-Object {
+                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after}
+                            }
+                    } elseif ($before) {
+                        $lognames | ForEach-Object {
+                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
+                            }
+                    } elseif ($date) {
+                        $lognames | ForEach-Object {
+                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
+                            }
+                    } elseif ($date -and $before) {
+                        $lognames | ForEach-Object {
+                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
+                            }
+                    } elseif ($date -and $before -and $after) {
+                        $lognames | ForEach-Object {
+                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
+                            }
+                    } else {                       $lognames | ForEach-Object {
+                            Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
+                            }
+                    }
                 }
             }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
