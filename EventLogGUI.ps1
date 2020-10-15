@@ -1,3 +1,4 @@
+
 <# .SYNOPSIS
      EventLog parser
 .DESCRIPTION
@@ -27,12 +28,14 @@ $Label1.height                   = 10
 $Label1.location                 = New-Object System.Drawing.Point(11,12)
 $Label1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold))
 
-$copmutername1                   = New-Object system.Windows.Forms.TextBox
-$copmutername1.multiline         = $false
-$copmutername1.width             = 145
-$copmutername1.height            = 20
-$copmutername1.location          = New-Object System.Drawing.Point(122,38)
-$copmutername1.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$computername1                   = New-Object system.Windows.Forms.TextBox
+$computername1.multiline         = $false
+$computername1.width             = 145
+$computername1.height            = 20
+$computername1.location          = New-Object System.Drawing.Point(122,38)
+$computername1.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$computername1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$computername1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $all                             = New-Object system.Windows.Forms.RadioButton
 $all.text                        = "All"
@@ -70,13 +73,16 @@ $newest1                         = New-Object system.Windows.Forms.TextBox
 $newest1.multiline               = $false
 $newest1.width                   = 144
 $newest1.height                  = 20
+$newest1.Text                    = "200"
 $newest1.location                = New-Object System.Drawing.Point(122,65)
 $newest1.Font                    = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$newest1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$newest1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $Groupbox2                       = New-Object system.Windows.Forms.Groupbox
 $Groupbox2.height                = 121
 $Groupbox2.width                 = 112
-$Groupbox2.text                  = "Group Box"
+$Groupbox2.text                  = "EventLogs"
 $Groupbox2.location              = New-Object System.Drawing.Point(1,36)
 $Groupbox2.BackColor             = [System.Drawing.ColorTranslator]::FromHtml("#9b9b9b")
 
@@ -87,6 +93,8 @@ $date1.height                    = 20
 $date1.Text                      = $(get-date -Format MM/dd)
 $date1.location                  = New-Object System.Drawing.Point(123,92)
 $date1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$date1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$date1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $before1                         = New-Object system.Windows.Forms.TextBox
 $before1.multiline               = $false
@@ -94,6 +102,8 @@ $before1.width                   = 143
 $before1.height                  = 20
 $before1.location                = New-Object System.Drawing.Point(123,119)
 $before1.Font                    = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$before1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$before1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $after1                          = New-Object system.Windows.Forms.TextBox
 $after1.multiline                = $false
@@ -101,6 +111,8 @@ $after1.width                    = 143
 $after1.height                   = 20
 $after1.location                 = New-Object System.Drawing.Point(123,146)
 $after1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$after1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$after1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $time1                           = New-Object system.Windows.Forms.TextBox
 $time1.multiline                 = $false
@@ -108,6 +120,8 @@ $time1.width                     = 144
 $time1.height                    = 20
 $time1.location                  = New-Object System.Drawing.Point(121,173)
 $time1.Font                      = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$time1.Add_Click( { $this.SelectAll(); $this.Focus() })
+$time1.Add_KeyDown({if ($_.KeyCode -eq "Enter") { log }})
 
 $Button1                         = New-Object system.Windows.Forms.Button
 $Button1.text                    = "Run"
@@ -150,7 +164,7 @@ $Label5.location                 = New-Object System.Drawing.Point(277,178)
 $Label5.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $Label6                          = New-Object system.Windows.Forms.Label
-$Label6.text                     = "Newest (default 200)"
+$Label6.text                     = "Newest"
 $Label6.AutoSize                 = $true
 $Label6.width                    = 25
 $Label6.height                   = 10
@@ -165,14 +179,11 @@ $Label7.height                   = 10
 $Label7.location                 = New-Object System.Drawing.Point(277,97)
 $Label7.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$Form.controls.AddRange(@($Groupbox1,$copmutername1,$newest1,$Groupbox2,$date1,$before1,$after1,$time1,$Button1,$Label2,$Label3,$Label4,$Label5,$Label6,$Label7))
+$Form.controls.AddRange(@($Groupbox1,$computername1,$newest1,$Groupbox2,$date1,$before1,$after1,$time1,$Button1,$Label2,$Label3,$Label4,$Label5,$Label6,$Label7))
 $Groupbox1.controls.AddRange(@($Label1))
 $Groupbox2.controls.AddRange(@($all,$system,$security,$application))
 
-
 $Button1.Add_Click({ log })
-
-
 Function log {
     if ($system.Checked -eq $true) {
         $logname = "system"
@@ -181,7 +192,6 @@ Function log {
     } elseif ($application.Checked -eq $true) {
             $logname = "application"
     }
-
     $ComputerName = $computername1.Text
     $newest = $newest1.Text
     $time = $time1.Text
@@ -189,14 +199,13 @@ Function log {
     $before = $before1.Text
     $after = $after1.Text
     $date = $date1.Text
-    
+
     if ($computername1.Text -and $computername1.Text -ne "localhost") {
-          $uname=("$env:USERDOMAIN\$env:USERNAME")
-          $cred = Get-Credential $uname
-          }
-          
+        $uname=("$env:USERDOMAIN\$env:USERNAME")
+        $cred = Get-Credential $uname
+        }
+
     if (!$newest) {$newest = "200"}
- 
  function parser1() {
     if ($after -and $before) {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
@@ -229,8 +238,7 @@ Function log {
                 Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
                 }
      } elseif ($date) {
-            $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
+            $lognames | ForEach-Object {                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
                 }
      } elseif ($date -and $before) {
             $lognames | ForEach-Object {
@@ -275,22 +283,19 @@ Function log {
                         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
                     } else {
                         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch "$time"}
-                    }
-
-                    }
+                    }                    }
         }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
         }
-    
     elseif ($all.Checked) {
             if (!$ComputerName -or $ComputerName -imatch "localhost") {
                 $res = Invoke-Command -ScriptBlock {
                     $lognames="Application","Security","System"
                     parser2
                     }
+
             } else {
                 $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock {
-
                 $newest = $args[0]
                 $time = $args[1]
                 $logname = $args[2]
@@ -298,7 +303,6 @@ Function log {
                 $before = $args[4]
                 $after = $args[5]
                 $lognames="Application","Security","System"
-
                 if ($after -and $before) {
                    $lognames | ForEach-Object {
                        Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
@@ -323,12 +327,10 @@ Function log {
                        $lognames | ForEach-Object {
                            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
                            }
-                } else {
-                       $lognames | ForEach-Object {
+                } else {                       $lognames | ForEach-Object {
                            Get-EventLog -LogName $_ -Newest $newest | where {$_.TimeGenerated -imatch "$time"}
                            }
                 }
-
                 }
             }
             $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
