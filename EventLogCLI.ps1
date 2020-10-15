@@ -27,7 +27,7 @@
     [string]$logname
     )
      
-    if ($computername1.Text -and $computername1.Text -ne "localhost") {
+    if ($ComputerName -and $ComputerName -ne "localhost") {
           $uname=("$env:USERDOMAIN\$env:USERNAME")
           $cred = Get-Credential $uname
     }
