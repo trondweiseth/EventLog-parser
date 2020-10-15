@@ -7,7 +7,7 @@ To fetch and parse windows event logs from local or remote Computer.
 If the "all" radio button is selected, it will fetch  the last 200 logs of each log type.
 To copy logs from Out-Gridview, select log lines and hit ok or enter. It will copy the text to clipboard.
 
-<img src="eventlogcli2.png">
+<img src="eventlogcli3.png">
 
 
 # Event Log CLI Parser
