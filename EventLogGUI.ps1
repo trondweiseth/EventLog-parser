@@ -240,7 +240,8 @@ function parser2() {
                 Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
                 }
      } elseif ($date) {
-            $lognames | ForEach-Object {                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
+            $lognames | ForEach-Object {
+                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date}
                 }
      } elseif ($date -and $before) {
             $lognames | ForEach-Object {
