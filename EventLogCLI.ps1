@@ -52,7 +52,8 @@ function parser1() {
     $before,
     $after
     )
-
+    
+    if (!$newest) {$newest = "200"}
     if ($after -and $before) {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
     } elseif ($after) {
@@ -80,9 +81,10 @@ function parser2() {
     $before,
     $after
     )
-
+    
+    if (!$newest) {$newest = "200"}
     $lognames="Application","Security","System"
-
+    
     if ($after -and $before) {
         $lognames | ForEach-Object {
             Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
@@ -133,8 +135,6 @@ if ($help) {
   help
   } else {
 
-    if (!$newest) {$newest = "200"}
-    
     if ($logname) {
 
         if (!$ComputerName -or $ComputerName -imatch "localhost") {
