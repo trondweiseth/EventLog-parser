@@ -201,7 +201,8 @@ function log {
     $before = $before1.Text
     $after = $after1.Text
     $date = $date1.Text
-
+    $arglst = @("$newest","$time","$logname","$date","$before","$after")
+    
     if ($computername1.Text -and $computername1.Text -ne "localhost") {
         $uname=("$env:USERDOMAIN\$env:USERNAME")
         $cred = Get-Credential $uname
@@ -280,7 +281,11 @@ function log {
                     }
         }
     }
- 
+    
+    function outpars() {
+        $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
+    }
+
     if ($logname) {
 
             if (!$ComputerName -or $ComputerName -imatch "localhost") {
@@ -288,9 +293,9 @@ function log {
                     parser1
                     }
             } else {
-                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser1}
+                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
             }
-            $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
+            outpars
     }
 
     elseif ($all.Checked) {
@@ -300,9 +305,9 @@ function log {
                     parser2
                     }
             } else {
-                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser2}
+                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
             }
-            $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
+            outpars
     }
 }
 [void]$Form.ShowDialog()
