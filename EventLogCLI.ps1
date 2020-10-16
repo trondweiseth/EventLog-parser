@@ -36,7 +36,7 @@ param(
 function help() {
 
     Write-Host -ForegroundColor Green "###################################################################################################################################"
-    Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/YYYY>] [-before <time>] [-after <time>]"
+    Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/yyyy>] [-before <time>] [-after <time>]"
     Write-Host -ForegroundColor Green "---------------------"
     Write-Host -ForegroundColor Yellow " Example:"
     Write-Host ""    
