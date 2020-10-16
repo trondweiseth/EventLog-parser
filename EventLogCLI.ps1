@@ -28,7 +28,7 @@ param(
     [string]$logname
     )
 
-    $arglst=@("$newest","$time","$logname","$date","$before","$after")
+    $arglst = @("$newest","$time","$logname","$date","$before","$after")
 
 function help() {
 
