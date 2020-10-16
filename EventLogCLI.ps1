@@ -62,9 +62,9 @@ function parser1() {
     } elseif ($date) {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date}
     } elseif ($date -and $before) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
+        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before}
     } elseif ($date -and $before -and $after) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
+        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -gt $after}
     } else {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch "$time"}
     }
@@ -101,11 +101,11 @@ function parser2() {
                 }
      } elseif ($date -and $before) {
             $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before}
+                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before}
                 }
      } elseif ($date -and $before -and $after) {
             $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -lt $after}
+                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -gt $after}
                 }
      } else {
             $lognames | ForEach-Object {
