@@ -12,7 +12,7 @@
      Author     : Trond Weiseth
 #>
 
-    param(
+param(
     [CmdletBinding()]
     [Parameter(Mandatory=$false,Position=0)][string]$ComputerName,
     [string]$time,
@@ -27,23 +27,18 @@
     [string]$logname
     )
 
-    if ($ComputerName -and $ComputerName -ne "localhost") {
-          $uname=("$env:USERDOMAIN\$env:USERNAME")
-          $cred = Get-Credential $uname
-          }
-          
-    if ($help) {
-        Write-Host -ForegroundColor Green "###################################################################################################################################"
-        Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/YYYY>] [-before <time>] [-after <time>]"
-        Write-Host -ForegroundColor Green "---------------------"
-        Write-Host -ForegroundColor Yellow " Example:"
-        Write-Host ""    
-        Write-Host -ForegroundColor Yellow "     log -ComputerName $env:COMPUTERNAME -newest 1000 -time 10:10 -logname system -date 10/14/2020"
-        Write-Host -ForegroundColor Yellow "     log -logname system -before 11:00 -after 10:00 -date 10/14"
-        Write-Host -ForegroundColor Green "###################################################################################################################################"
-        } else {
+function help() {
 
- 
+    Write-Host -ForegroundColor Green "###################################################################################################################################"
+    Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/YYYY>] [-before <time>] [-after <time>]"
+    Write-Host -ForegroundColor Green "---------------------"
+    Write-Host -ForegroundColor Yellow " Example:"
+    Write-Host ""    
+    Write-Host -ForegroundColor Yellow "     log -ComputerName $env:COMPUTERNAME -newest 1000 -time 10:10 -logname system -date 10/14/2020"
+    Write-Host -ForegroundColor Yellow "     log -logname system -before 11:00 -after 10:00 -date 10/14"
+    Write-Host -ForegroundColor Green "###################################################################################################################################"
+} 
+
 function parser1() {
 
     param (
@@ -115,7 +110,26 @@ function parser2() {
                 }
     }
 }
- 
+
+function outpars() {
+
+    if ($o) {
+        $res | Format-Table -AutoSize -Wrap
+        $res | Format-Table -AutoSize -Wrap | clip
+    } else {
+        $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
+    }
+}
+
+if ($ComputerName -and $ComputerName -ne "localhost") {
+    $uname=("$env:USERDOMAIN\$env:USERNAME")
+    $cred = Get-Credential $uname
+    }
+    
+if ($help) {
+  help
+  } else {
+
     if (!$newest) {$newest = "200"}
     
     if ($logname) {
@@ -127,14 +141,7 @@ function parser2() {
         } else {
             $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser1}
         }
-
-        if ($o) {
-            $res | Format-Table -AutoSize -Wrap
-            $res | Format-Table -AutoSize -Wrap | clip
-        } else {
-            $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
-        }
-
+        outpars
     } else {
         if (!$ComputerName -or $ComputerName -imatch "localhost") {
             $res = Invoke-Command -ScriptBlock {
@@ -143,13 +150,7 @@ function parser2() {
                 }
         } else {
             $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser2}
-
-                if ($o) {
-                    $res | Format-Table -AutoSize -Wrap
-                    $res | Format-Table -AutoSize -Wrap | clip
-                } else {
-                    $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
-                }
-            }
+        }
+        outpars
     }
 }
