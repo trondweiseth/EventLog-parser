@@ -1,3 +1,4 @@
+
 <# .SYNOPSIS
 
      EventLog parser 
@@ -26,6 +27,8 @@ param(
     [ValidateSet("system","application","security")]
     [string]$logname
     )
+
+    $arglst=@("$newest","$time","$logname","$date","$before","$after")
 
 function help() {
 
@@ -125,7 +128,7 @@ if ($ComputerName -and $ComputerName -ne "localhost") {
     $uname=("$env:USERDOMAIN\$env:USERNAME")
     $cred = Get-Credential $uname
     }
-    
+
 if ($help) {
   help
   } else {
@@ -139,7 +142,7 @@ if ($help) {
                 parser1
                 }
         } else {
-            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser1}
+            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
         }
         outpars
     } else {
@@ -149,7 +152,7 @@ if ($help) {
                 parser2
                 }
         } else {
-            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList $newest, $time, $logname, $date, $before, $after -ScriptBlock ${function:parser2}
+            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
         }
         outpars
     }
