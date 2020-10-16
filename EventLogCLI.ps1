@@ -1,4 +1,5 @@
 
+
 <# .SYNOPSIS
 
      EventLog parser 
@@ -130,30 +131,15 @@ if ($ComputerName -and $ComputerName -ne "localhost") {
     $uname=("$env:USERDOMAIN\$env:USERNAME")
     $cred = Get-Credential $uname
     }
-
-if ($help) {
+    
+if ($help -or !$ComputerName) {
   help
   } else {
 
     if ($logname) {
-
-        if (!$ComputerName -or $ComputerName -imatch "localhost") {
-            $res = Invoke-Command -ScriptBlock {
-                parser1
-                }
-        } else {
-            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
-        }
-        outpars
+        $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
     } else {
-        if (!$ComputerName -or $ComputerName -imatch "localhost") {
-            $res = Invoke-Command -ScriptBlock {
-                $lognames="Application","Security","System"
-                parser2
-                }
-        } else {
-            $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
+        $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
         }
-        outpars
     }
-}
+outpars
