@@ -28,7 +28,9 @@ param(
     [ValidateSet("system","application","security")]
     [string]$logname
     )
-
+    
+    $uname=("$env:USERDOMAIN\$env:USERNAME")
+    $cred = Get-Credential $uname
     $arglst = @("$newest","$time","$logname","$date","$before","$after")
 
 function help() {
@@ -126,11 +128,6 @@ function outpars() {
         $res | Out-GridView -PassThru |  Format-Table -AutoSize -Wrap | clip
     }
 }
-
-if ($ComputerName -and $ComputerName -ne "localhost") {
-    $uname=("$env:USERDOMAIN\$env:USERNAME")
-    $cred = Get-Credential $uname
-    }
     
 if ($help -or !$ComputerName) {
   help
