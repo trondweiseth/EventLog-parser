@@ -1,4 +1,5 @@
 
+
 <# .SYNOPSIS
      EventLog parser
 .DESCRIPTION
@@ -186,6 +187,10 @@ $Groupbox2.controls.AddRange(@($all,$system,$security,$application))
 $Button1.Add_Click({ log })
 
 function log {
+
+    $uname=("$env:USERDOMAIN\$env:USERNAME")
+    $cred = Get-Credential $uname
+    
     if ($system.Checked -eq $true) {
         $logname = "system"
     } elseif ($security.Checked -eq $true) {
@@ -203,13 +208,6 @@ function log {
     $date = $date1.Text
     $arglst = @("$newest","$time","$logname","$date","$before","$after")
     
-    if ($computername1.Text -and $computername1.Text -ne "localhost") {
-        $uname=("$env:USERDOMAIN\$env:USERNAME")
-        $cred = Get-Credential $uname
-    }
-
-    if (!$newest) {$newest = "200"}
-    
     function parser1() {
 
         param (
@@ -221,6 +219,7 @@ function log {
         $after
         )
 
+        if (!$newest) {$newest = "200"}
         if ($after -and $before) {
             Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
         } elseif ($after) {
@@ -250,7 +249,7 @@ function log {
         )
 
         $lognames="Application","Security","System"
-
+        if (!$newest) {$newest = "200"}
         if ($after -and $before) {
             $lognames | ForEach-Object {
                 Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
@@ -287,27 +286,12 @@ function log {
     }
 
     if ($logname) {
-
-            if (!$ComputerName -or $ComputerName -imatch "localhost") {
-                $res = Invoke-Command -ScriptBlock {
-                    parser1
-                    }
-            } else {
-                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
-            }
-            outpars
-    }
+        $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
+        }
 
     elseif ($all.Checked) {
-            if (!$ComputerName -or $ComputerName -imatch "localhost") {
-                $res = Invoke-Command -ScriptBlock {
-                    $lognames="Application","Security","System"
-                    parser2
-                    }
-            } else {
-                $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
-            }
-            outpars
+        $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
+        }
+    outpars
     }
-}
 [void]$Form.ShowDialog()
