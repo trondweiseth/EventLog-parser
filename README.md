@@ -14,7 +14,7 @@ To copy logs from Out-Gridview, select log lines and hit ok or enter. It will co
 Same as the gui version, but can print out a more detailed message directly on the cli with option -o, and copy the output to the clipboard.
 If no logname is provided, it will fetch all 3 log types.
 
-Tip: Default it is set to fetch the last 200 logs. If the date and time is not recent and you get no results, you have to increase this from 200 to 1000 or more until you get a result.
+Tip: Default it is set to fetch the last 200 logs. If the date and time is not recent and you dont get any results, you have to increase this from 200 to 1000 or more until you get a result.
 
 SYNTAX
 
