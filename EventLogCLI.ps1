@@ -6,8 +6,10 @@
 
 .DESCRIPTION
 
-     Gettng event logs on local or remote PC
-     Example : log hostname.osl.basefarm.net -logname system -before 11:00 -after 10:00 -date 10/14
+     Gettng event logs on remote PC
+     Example : 
+              log -ComputerName contoso.local -newest 1000 -time 10:10 -logname system -date 14/10
+              log contoso.local -after 10:00 -before 11:00 -date 14/10/2020 -o
 
 .NOTES
 
@@ -29,6 +31,10 @@ param(
     [string]$logname
     )
     
+    if ($date -imatch 'day' -or $date -imatch'today' -or $date -imatch 'current' -or $date -imatch 'now') {
+          $date = $(get-date -Format MM/dd)
+    }
+          
     $uname=("$env:USERDOMAIN\$env:USERNAME")
     $cred = Get-Credential $uname
     $arglst = @("$newest","$time","$logname","$date","$before","$after")
@@ -130,13 +136,12 @@ function outpars() {
 }
     
 if ($help -or !$ComputerName) {
-  help
-  } else {
-
+     help
+} else {
     if ($logname) {
         $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser1}
     } else {
         $res = Invoke-Command -ComputerName $ComputerName -Credential $cred -ArgumentList ${arglst} -ScriptBlock ${function:parser2}
-        }
     }
+}
 outpars
