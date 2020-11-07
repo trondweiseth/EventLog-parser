@@ -31,7 +31,7 @@ param(
     [string]$logname
     )
     
-    if ($date -imatch 'day' -or $date -imatch'today' -or $date -imatch 'current' -or $date -imatch 'now') {
+    if ($date -imatch 'day' -or $date -imatch 'today' -or $date -imatch 'current' -or $date -imatch 'now') {
           $date = $(get-date -Format MM/dd)
     }
           
