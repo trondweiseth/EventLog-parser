@@ -47,7 +47,7 @@ function help() {
     Write-Host -ForegroundColor Yellow " Example:"
     Write-Host ""    
     Write-Host -ForegroundColor Yellow "     log -ComputerName $env:COMPUTERNAME -newest 1000 -time 10:10 -logname system -date 10/14/2020"
-    Write-Host -ForegroundColor Yellow "     log $env:COMPUTERNAME -logname system -before 11:00 -after 10:00 -date 10/14"
+    Write-Host -ForegroundColor Yellow "     log $env:COMPUTERNAME -logname system -before 11:00 -after 10:00 -date current"
     Write-Host -ForegroundColor Green "###################################################################################################################################"
 } 
 
