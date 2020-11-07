@@ -28,4 +28,4 @@ SYNTAX
 Example:
     
         log -ComputerName contoso.local -newest 1000 -time 10:10 -logname system -date 14/10
-        log contoso.local -after 10:00 -before 11:00 -date 14/10/2020 -o
+        log contoso.local -after 10:00 -before 11:00 -date current -o
