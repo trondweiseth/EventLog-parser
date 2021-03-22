@@ -1,4 +1,4 @@
-
+Function () {
 
 <# .SYNOPSIS
 
@@ -145,3 +145,4 @@ if ($help -or !$ComputerName) {
     }
 }
 outpars
+}
