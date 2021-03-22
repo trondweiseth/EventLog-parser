@@ -1,3 +1,6 @@
+Function log () {
+
+
 <# .SYNOPSIS
 
      EventLog parser 
@@ -13,7 +16,6 @@
 
      Author     : Trond Weiseth
 #>
-Function log() {
 
 param(
     [CmdletBinding()]
