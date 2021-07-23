@@ -45,7 +45,7 @@ param(
 
 function help() {
 
-    Write-Host -ForegroundColor Green "###################################################################################################################################"
+    Write-Host -ForegroundColor Green "######################################################################################################################################################"
     Write-Host -ForegroundColor Yellow " Usage:"
     Write-Host -ForegroundColor Yellow "	log [[host] | [-local]] [-newest number] [-time time] [-logname system|application|security] [-date MM/dd/yyyy] [-before time] [-after time]"
     Write-Host "" 
@@ -62,7 +62,7 @@ function help() {
     Write-Host ""    
     Write-Host -ForegroundColor Yellow "     log -local -newest 1000 -time 10:10 -logname system -date 10/14/2020"
     Write-Host -ForegroundColor Yellow "     log $env:COMPUTERNAME -logname system -before 11:00 -after 10:00 -date 10/14/2020"
-    Write-Host -ForegroundColor Green "###################################################################################################################################"
+    Write-Host -ForegroundColor Green "######################################################################################################################################################"
 } 
 
 function parser1() {
