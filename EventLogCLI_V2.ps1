@@ -33,9 +33,12 @@ param(
     [string]$logname
     )
     
-    if ($date -imatch 'day' -or $date -imatch 'today' -or $date -imatch 'current' -or $date -imatch 'now') {
-          $date = $(get-date -Format MM/dd)
-    }
+	if (!$newest) {$newest = "200"}
+	if (!$date) {$date = get-date -Format "MM/dd/yyyy"}
+	if ($date -match '\d{1,2}/\d{1,2}/\d{4}' -eq $false) {
+		Write-Host -ForegroundColor Red "Invalid date format. Correct format is 'MM/dd/yyyy'"
+		break
+	}
           
     $uname=("$env:USERDOMAIN\$env:USERNAME")
     $arglst = @("$newest","$time","$logname","$date","$before","$after")
@@ -43,12 +46,22 @@ param(
 function help() {
 
     Write-Host -ForegroundColor Green "###################################################################################################################################"
-    Write-Host -ForegroundColor Yellow " Syntax: [log <host> [-newest <number>] [-time <time>] [-logname <logname>] [-date <MM/dd/yyyy>] [-before <time>] [-after <time>]"
-    Write-Host -ForegroundColor Green "---------------------"
+    Write-Host -ForegroundColor Yellow " Usage:"
+    Write-Host -ForegroundColor Yellow "	log [[host] | [-local]] [-newest number] [-time time] [-logname system|application|security] [-date MM/dd/yyyy] [-before time] [-after time]"
+    Write-Host "" 
+    Write-Host -ForegroundColor Yellow " Options:"
+    Write-Host -ForegroundColor Yellow "	-local		Runs the script on the local computer"
+    Write-Host -ForegroundColor Yellow "	-newest		Sets the number of logs to be fetched from newest to old (Default 200)"
+    Write-Host -ForegroundColor Yellow "	-time		Time when the log was created"
+    Write-Host -ForegroundColor Yellow "	-logname	Name of logs to fetch. If not set, all logs will be fetched. [system|application|security]"
+    Write-Host -ForegroundColor Yellow "	-date		Date when the log was created"
+    Write-Host -ForegroundColor Yellow "	-before		Fetching logs before a given time"
+    Write-Host -ForegroundColor Yellow "	-after		Fetching logs after a given time"
+    Write-Host ""
     Write-Host -ForegroundColor Yellow " Example:"
     Write-Host ""    
-    Write-Host -ForegroundColor Yellow "     log -ComputerName $env:COMPUTERNAME -newest 1000 -time 10:10 -logname system -date 10/14/2020"
-    Write-Host -ForegroundColor Yellow "     log $env:COMPUTERNAME -logname system -before 11:00 -after 10:00 -date current"
+    Write-Host -ForegroundColor Yellow "     log -local -newest 1000 -time 10:10 -logname system -date 10/14/2020"
+    Write-Host -ForegroundColor Yellow "     log $env:COMPUTERNAME -logname system -before 11:00 -after 10:00 -date 10/14/2020"
     Write-Host -ForegroundColor Green "###################################################################################################################################"
 } 
 
@@ -63,19 +76,16 @@ function parser1() {
     $after
     )
     
-    if (!$newest) {$newest = "200"}
     if ($after -and $before) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
+        Get-EventLog -Newest $newest -LogName $logname -after "$date $after" -before "$date $before"
     } elseif ($after) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -gt $after}
+        Get-EventLog -Newest $newest -LogName $logname  -after "$date $after"
     } elseif ($before) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -lt $before}
+        Get-EventLog -Newest $newest -LogName $logname -before "$date $before"
     } elseif ($date) {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date}
     } elseif ($date -and $before) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before}
-    } elseif ($date -and $before -and $after) {
-        Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -gt $after}
+        Get-EventLog -Newest $newest -LogName $logname -before "$date $before"
     } else {
         Get-EventLog -Newest $newest -LogName $logname | where {$_.TimeGenerated -imatch "$time"}
     }
@@ -92,20 +102,19 @@ function parser2() {
     $after
     )
     
-    if (!$newest) {$newest = "200"}
     $lognames="Application","Security","System"
     
     if ($after -and $before) {
         $lognames | ForEach-Object {
-            Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after -and $_.TimeGenerated -lt $before}
+            Get-EventLog -Newest $newest -LogName $_ -after "$date $after" -before "$date $before"
             }
      } elseif ($after) {
             $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -gt $after}
+                Get-EventLog -Newest $newest -LogName $_ -after "$date $after"
                 }
      } elseif ($before) {
             $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -lt $before}
+                Get-EventLog -Newest $newest -LogName $_ -before "$date $before"
                 }
      } elseif ($date) {
             $lognames | ForEach-Object {
@@ -113,11 +122,7 @@ function parser2() {
                 }
      } elseif ($date -and $before) {
             $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before}
-                }
-     } elseif ($date -and $before -and $after) {
-            $lognames | ForEach-Object {
-                Get-EventLog -Newest $newest -LogName $_ | where {$_.TimeGenerated -imatch $date -and $_.TimeGenerated -lt $before -and $_.TimeGenerated -gt $after}
+                Get-EventLog -Newest $newest -LogName $_ -before "$date $before"
                 }
      } else {
             $lognames | ForEach-Object {
@@ -156,5 +161,4 @@ if ($local){
         }
     }
     outpars
-}
 }
